@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sertecmult RD | Ingeniería térmica industrial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#081019;
+    --navy-900:#0B1B2B;
+    --navy-800:#14293D;
+    --navy-700:#1D3A52;
+    --ice-400:#4FD1E8;
+    --ice-300:#8FE4F1;
+    --heat-500:#FF6B4A;
+    --steel-300:#8CA0B3;
+    --steel-200:#B7C4CF;
+    --off-white:#EDF2F5;
+    --panel-line: rgba(143,228,241,0.14);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy-950);
+    color:var(--off-white);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    line-height:1.05;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ice-400);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:20px; height:1px; background:var(--ice-400);}
+
+  /* ===== NAV ===== */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(8,16,25,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700; font-size:22px; letter-spacing:0.03em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo .dot{width:9px; height:9px; background:var(--ice-400); border-radius:50%; box-shadow:0 0 10px var(--ice-400);}
+  .logo span{color:var(--ice-400);}
+  .nav-links{display:flex; gap:34px; font-size:14px; font-weight:500;}
+  .nav-links a{color:var(--steel-200); transition:color .2s;}
+  .nav-links a:hover{color:var(--ice-300);}
+  .nav-cta{
+    border:1px solid var(--ice-400); color:var(--ice-300);
+    padding:10px 20px; font-size:13px; font-weight:600;
+    letter-spacing:0.04em; text-transform:uppercase;
+    transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--ice-400); color:var(--navy-950);}
+  .nav-toggle{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;}
+  .nav-toggle span{width:24px; height:2px; background:var(--off-white);}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding:140px 0 80px;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% 20%, rgba(79,209,232,0.10), transparent 60%),
+      linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 100%);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(42px,5.2vw,68px);
+    color:var(--off-white);
+    margin:18px 0 22px;
+  }
+  .hero h1 em{font-style:normal; color:var(--ice-400);}
+  .hero p.lead{
+    font-size:18px; color:var(--steel-200); max-width:520px; margin-bottom:34px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:46px;}
+  .btn-primary{
+    background:var(--ice-400); color:var(--navy-950);
+    padding:15px 28px; font-weight:600; font-size:14px;
+    letter-spacing:0.03em; text-transform:uppercase;
+    border:1px solid var(--ice-400);
+    transition:all .2s;
+  }
+  .btn-primary:hover{background:transparent; color:var(--ice-300);}
+  .btn-ghost{
+    border:1px solid var(--steel-300); color:var(--steel-200);
+    padding:15px 28px; font-weight:600; font-size:14px;
+    letter-spacing:0.03em; text-transform:uppercase;
+    transition:all .2s;
+  }
+  .btn-ghost:hover{border-color:var(--ice-400); color:var(--ice-300);}
+
+  .hero-tags{display:flex; gap:28px; flex-wrap:wrap;}
+  .hero-tags div{font-size:13px; color:var(--steel-300);}
+  .hero-tags b{color:var(--off-white); font-family:'IBM Plex Mono',monospace; font-weight:500; display:block; font-size:15px;}
+
+  /* HMI panel */
+  .panel{
+    background:linear-gradient(180deg, var(--navy-800), var(--navy-900));
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    padding:26px;
+    position:relative;
+  }
+  .panel-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono',monospace; font-size:11px;
+    color:var(--steel-300); letter-spacing:0.08em;
+    padding-bottom:16px; border-bottom:1px solid var(--panel-line); margin-bottom:20px;
+  }
+  .panel-head .live{display:flex; align-items:center; gap:6px; color:var(--ice-300);}
+  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--ice-400); animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.25;}}
+
+  .gauge-row{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px;}
+  .gauge-label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel-300); letter-spacing:0.06em; margin-bottom:6px;}
+  .temp-hot{font-family:'Barlow Condensed',sans-serif; font-size:38px; font-weight:700; color:var(--heat-500);}
+  .temp-cold{font-family:'Barlow Condensed',sans-serif; font-size:38px; font-weight:700; color:var(--ice-400);}
+  .arrow-track{flex:1; height:2px; background:var(--panel-line); margin:0 18px 10px; position:relative; overflow:hidden;}
+  .arrow-track::after{
+    content:''; position:absolute; top:0; left:-40%; width:40%; height:100%;
+    background:linear-gradient(90deg, transparent, var(--ice-300), transparent);
+    animation:flow 2.4s linear infinite;
+  }
+  @keyframes flow{to{left:100%;}}
+
+  .bar-field{margin-bottom:18px;}
+  .bar-field .flabel{display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel-300); margin-bottom:8px;}
+  .bar-field .flabel span:last-child{color:var(--ice-300);}
+  .bar-track{height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg, var(--heat-500), var(--ice-400)); border-radius:3px;}
+
+  .panel-foot{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; padding-top:20px; border-top:1px solid var(--panel-line);
+  }
+  .panel-foot div{text-align:center;}
+  .panel-foot b{display:block; font-family:'IBM Plex Mono',monospace; font-size:18px; color:var(--off-white); font-weight:500;}
+  .panel-foot span{font-size:10px; color:var(--steel-300); letter-spacing:0.06em; text-transform:uppercase;}
+
+  /* ===== SECTION BASE ===== */
+  section{padding:110px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(30px,4vw,44px); color:var(--off-white); margin-top:14px;}
+  .section-head p{color:var(--steel-200); font-size:16px; margin-top:16px; max-width:560px;}
+
+  /* ===== SEGMENTOS ===== */
+  .segmentos{background:var(--navy-900); border-bottom:1px solid var(--panel-line);}
+  .seg-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--panel-line); border:1px solid var(--panel-line);}
+  .seg-card{background:var(--navy-950); padding:36px 28px; transition:background .25s;}
+  .seg-card:hover{background:var(--navy-800);}
+  .seg-num{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ice-400); margin-bottom:20px; display:block;}
+  .seg-card h3{font-size:24px; color:var(--off-white); margin-bottom:12px;}
+  .seg-card p{font-size:14px; color:var(--steel-300);}
+
+  /* ===== EQUIPOS ===== */
+  .eq-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .eq-card{
+    border:1px solid var(--panel-line); padding:30px 26px;
+    background:linear-gradient(180deg, rgba(79,209,232,0.03), transparent);
+    transition:border-color .25s, transform .25s;
+  }
+  .eq-card:hover{border-color:var(--ice-400); transform:translateY(-4px);}
+  .eq-icon{width:44px; height:44px; margin-bottom:22px;}
+  .eq-card h3{font-size:22px; color:var(--off-white); margin-bottom:10px;}
+  .eq-card p{font-size:14px; color:var(--steel-300);}
+
+  /* ===== SOLUCIONES (services list) ===== */
+  .soluciones{background:var(--navy-900); border-top:1px solid var(--panel-line); border-bottom:1px solid var(--panel-line);}
+  .sol-inner{display:grid; grid-template-columns:0.85fr 1.15fr; gap:60px; align-items:start;}
+  .sol-list{display:flex; flex-direction:column;}
+  .sol-item{
+    display:flex; gap:20px; padding:22px 0; border-bottom:1px solid var(--panel-line);
+  }
+  .sol-item:first-child{padding-top:0;}
+  .sol-idx{font-family:'IBM Plex Mono',monospace; color:var(--ice-400); font-size:13px; padding-top:2px;}
+  .sol-item h4{font-size:17px; font-weight:600; text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif; color:var(--off-white); margin-bottom:4px;}
+  .sol-item p{font-size:14px; color:var(--steel-300);}
+
+  /* ===== PAISES / CLIENTES ===== */
+  .paises{text-align:left;}
+  .paises-list{display:flex; flex-wrap:wrap; gap:14px; margin-top:28px;}
+  .pais-chip{
+    border:1px solid var(--panel-line); padding:10px 20px; font-size:13px; color:var(--steel-200);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .pais-chip.active{border-color:var(--ice-400); color:var(--ice-300);}
+
+  /* ===== CTA STRIP ===== */
+  .cta-strip{
+    background:linear-gradient(120deg, var(--navy-800), var(--navy-950));
+    border:1px solid var(--panel-line);
+    padding:60px 50px; display:flex; justify-content:space-between; align-items:center; gap:40px; flex-wrap:wrap;
+  }
+  .cta-strip h3{font-size:clamp(26px,3.4vw,36px); color:var(--off-white); max-width:520px;}
+  .cta-strip p{color:var(--steel-300); font-size:14px; margin-top:10px;}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--navy-950); padding:70px 0 30px; border-top:1px solid var(--panel-line);}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:60px;}
+  .foot-col h5{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em; color:var(--ice-400); text-transform:uppercase; margin-bottom:18px;}
+  .foot-col a, .foot-col p{display:block; font-size:14px; color:var(--steel-300); margin-bottom:10px;}
+  .foot-col a:hover{color:var(--ice-300);}
+  .foot-bottom{
+    display:flex; justify-content:space-between; padding-top:26px; border-top:1px solid var(--panel-line);
+    font-size:12px; color:var(--steel-300); flex-wrap:wrap; gap:12px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;}
+    .seg-grid{grid-template-columns:repeat(2,1fr);}
+    .eq-grid{grid-template-columns:repeat(2,1fr);}
+    .sol-inner{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:720px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+    .nav-cta{display:none;}
+    .seg-grid{grid-template-columns:1fr;}
+    .eq-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    section{padding:70px 0;}
+    .wrap{padding:0 20px;}
+    nav{padding:16px 20px;}
+    .cta-strip{padding:40px 26px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span>SERTECMULT<span>·RD</span></div>
+    <div class="nav-links">
+      <a href="#segmentos">Segmentos</a>
+      <a href="#equipos">Equipos</a>
+      <a href="#soluciones">Soluciones</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a href="#contacto" class="nav-cta">Contáctenos</a>
+    <button class="nav-toggle" aria-label="Menú"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Ingeniería térmica industrial · República Dominicana y el Caribe</div>
+      <h1>El frío es<br><em>indispensable.</em><br>Nosotros lo hacemos posible.</h1>
+      <p class="lead">Diseñamos, instalamos y mantenemos sistemas de refrigeración de precisión para procesos industriales, farmacéuticos, hospitalarios y HVAC. Cuando su producción se calienta, respondemos con tecnología.</p>
+      <div class="hero-ctas">
+        <a href="#contacto" class="btn-primary">Solicitar diagnóstico</a>
+        <a href="#equipos" class="btn-ghost">Ver equipos</a>
+      </div>
+      <div class="hero-tags">
+        <div><b>04</b>segmentos atendidos</div>
+        <div><b>06</b>líneas de equipos</div>
+        <div><b>24/7</b>soporte técnico</div>
+        <div><b>RD + Caribe</b>cobertura regional</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span>PANEL_TERMICO / LINEA_01</span>
+        <span class="live"><span class="live-dot"></span>EN VIVO</span>
+      </div>
+      <div class="gauge-row">
+        <div>
+          <div class="gauge-label">TEMP. PROCESO</div>
+          <div class="temp-hot">86°C</div>
+        </div>
+        <div class="arrow-track"></div>
+        <div style="text-align:right">
+          <div class="gauge-label">TEMP. CONTROLADA</div>
+          <div class="temp-cold">18°C</div>
+        </div>
+      </div>
+      <div class="bar-field">
+        <div class="flabel"><span>CARGA TÉRMICA</span><span>ESTABLE</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:72%"></div></div>
+      </div>
+      <div class="bar-field">
+        <div class="flabel"><span>EFICIENCIA CHILLER</span><span>96%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:96%"></div></div>
+      </div>
+      <div class="bar-field" style="margin-bottom:0">
+        <div class="flabel"><span>PRESIÓN REFRIGERANTE</span><span>NOMINAL</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+      </div>
+      <div class="panel-foot">
+        <div><b>Oil Free</b><span>Compresores</span></div>
+        <div><b>HVAC</b><span>Gestión</span></div>
+        <div><b>24/7</b><span>Monitoreo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="segmentos" id="segmentos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Segmentos que atendemos</div>
+      <h2>Un sistema de frío para cada industria</h2>
+      <p>Cada sector exige tolerancias distintas de temperatura, humedad y continuidad. Adaptamos nuestros equipos y protocolos a la criticidad de cada operación.</p>
+    </div>
+  </div>
+  <div class="seg-grid">
+    <div class="seg-card">
+      <span class="seg-num">01</span>
+      <h3>Procesos industriales</h3>
+      <p>Climatización de máquinas para plástico, alimentos y manufactura, sosteniendo procesos potentes y precisos.</p>
+    </div>
+    <div class="seg-card">
+      <span class="seg-num">02</span>
+      <h3>Farmacéutico</h3>
+      <p>Refrigeración validada para líneas de producción farmacéutica, donde la estabilidad térmica es innegociable.</p>
+    </div>
+    <div class="seg-card">
+      <span class="seg-num">03</span>
+      <h3>Hospitalario</h3>
+      <p>Equipos y servicios para hospitales, clínicas y centros médicos, con foco en continuidad operativa.</p>
+    </div>
+    <div class="seg-card">
+      <span class="seg-num">04</span>
+      <h3>Sistema HVAC</h3>
+      <p>Climatización de precisión para medianas y grandes empresas comerciales.</p>
+    </div>
+  </div>
+</section>
+
+<section id="equipos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Equipos</div>
+      <h2>Tecnología que sostiene su operación</h2>
+      <p>Seis líneas de equipos y servicios especializados, seleccionadas y mantenidas para el clima y la exigencia industrial del Caribe.</p>
+    </div>
+    <div class="eq-grid">
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><rect x="4" y="4" width="36" height="36" rx="3" stroke="#4FD1E8" stroke-width="1.5"/><path d="M14 22h16M22 14v16" stroke="#4FD1E8" stroke-width="1.5"/></svg>
+        <h3>Chillers</h3>
+        <p>Unidades enfriadoras de agua para procesos industriales y HVAC, con gestión completa del sistema.</p>
+      </div>
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="16" stroke="#4FD1E8" stroke-width="1.5"/><path d="M22 12v10l7 4" stroke="#4FD1E8" stroke-width="1.5"/></svg>
+        <h3>DryCooler</h3>
+        <p>Disipación térmica seca de alta eficiencia para circuitos cerrados, sin consumo adicional de agua.</p>
+      </div>
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><path d="M8 30l8-16 6 10 5-8 9 14" stroke="#4FD1E8" stroke-width="1.5" fill="none"/></svg>
+        <h3>Estudios de estabilidad</h3>
+        <p>Monitoreo y validación de condiciones térmicas para procesos que exigen trazabilidad.</p>
+      </div>
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="14" stroke="#4FD1E8" stroke-width="1.5"/><circle cx="22" cy="22" r="4" stroke="#4FD1E8" stroke-width="1.5"/></svg>
+        <h3>Oil Free</h3>
+        <p>Compresores libres de aceite para procesos donde la pureza del aire es crítica.</p>
+      </div>
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><rect x="6" y="10" width="32" height="24" rx="2" stroke="#4FD1E8" stroke-width="1.5"/><path d="M6 18h32" stroke="#4FD1E8" stroke-width="1.5"/></svg>
+        <h3>Transformación de plástico</h3>
+        <p>Refrigeración dedicada a moldeo e inyección, sincronizada con el ciclo productivo.</p>
+      </div>
+      <div class="eq-card">
+        <svg class="eq-icon" viewBox="0 0 44 44" fill="none"><rect x="8" y="8" width="28" height="28" rx="3" stroke="#4FD1E8" stroke-width="1.5"/><path d="M8 22h28" stroke="#4FD1E8" stroke-width="1.5"/></svg>
+        <h3>Cámaras climáticas</h3>
+        <p>Ambientes controlados de temperatura y humedad para ensayos y almacenamiento crítico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="soluciones" id="soluciones">
+  <div class="wrap sol-inner">
+    <div class="section-head" style="margin-bottom:0">
+      <div class="eyebrow">Soluciones</div>
+      <h2>De la instalación al mantenimiento</h2>
+      <p>Acompañamos el ciclo completo del sistema de refrigeración, desde el proyecto llave en mano hasta el soporte diario.</p>
+    </div>
+    <div class="sol-list">
+      <div class="sol-item">
+        <span class="sol-idx">01</span>
+        <div><h4>Instalación de equipos de refrigeración</h4><p>Puesta en marcha técnica, alineada a las especificaciones del proceso.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">02</span>
+        <div><h4>Mantenimiento preventivo y correctivo</h4><p>Planes de mantenimiento que reducen paradas no programadas.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">03</span>
+        <div><h4>Servicios de reforma (overhaul)</h4><p>Recuperación y modernización de equipos existentes.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">04</span>
+        <div><h4>Mantenimiento eléctrico industrial</h4><p>Diagnóstico y reparación de los sistemas eléctricos asociados.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">05</span>
+        <div><h4>Gestión de chillers de procesos industriales</h4><p>Plástico, alimentos y farmacéutico, con protocolos específicos por sector.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">06</span>
+        <div><h4>Gestión de chiller sistema HVAC</h4><p>Operación continua de climatización comercial e institucional.</p></div>
+      </div>
+      <div class="sol-item">
+        <span class="sol-idx">07</span>
+        <div><h4>Soporte técnico en gabinetes (tipo mochila)</h4><p>Refrigeración de gabinetes eléctricos tipo mochila.</p></div>
+      </div>
+      <div class="sol-item" style="border-bottom:none">
+        <span class="sol-idx">08</span>
+        <div><h4>Proyectos llave en mano</h4><p>Diseño, ejecución y entrega completa del sistema térmico.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros">
+  <div class="wrap">
+    <div class="section-head paises">
+      <div class="eyebrow">Cobertura</div>
+      <h2>Presentes en República Dominicana y el Caribe</h2>
+      <p>Atendemos operaciones industriales, farmacéuticas y hospitalarias en toda la región. Si su país no está en la lista, hablemos.</p>
+      <div class="paises-list">
+        <span class="pais-chip active">República Dominicana</span>
+        <span class="pais-chip">Caribe</span>
+        <span class="pais-chip active">Entrenamientos en Brasil</span>
+        <span class="pais-chip">¿El suyo? Contáctenos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-strip">
+      <div>
+        <div class="eyebrow">Trabaja con nosotros</div>
+        <h3 style="margin-top:14px">Buscamos técnicos e ingenieros que dominen el frío como oficio.</h3>
+        <p>Sumate a un equipo especializado en refrigeración industrial de alta exigencia.</p>
+      </div>
+      <a href="#contacto" class="btn-primary">Ver oportunidades</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contacto">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="logo" style="margin-bottom:16px"><span class="dot"></span>SERTECMULT<span>·RD</span></div>
+        <p style="max-width:280px">Expertos en ingeniería térmica. Climatización de precisión para la industria, la salud y el comercio.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Equipos</h5>
+        <a href="#equipos">Chillers</a>
+        <a href="#equipos">DryCooler</a>
+        <a href="#equipos">Estudios de estabilidad</a>
+        <a href="#equipos">Oil Free</a>
+        <a href="#equipos">Transformación de plástico</a>
+        <a href="#equipos">Cámaras climáticas</a>
+      </div>
+      <div class="foot-col">
+        <h5>Empresa</h5>
+        <a href="#segmentos">Segmentos</a>
+        <a href="#soluciones">Soluciones</a>
+        <a href="#nosotros">Cobertura</a>
+        <a href="#contacto">Certificaciones</a>
+        <a href="#contacto">Trabaja con nosotros</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contacto</h5>
+        <p>info@sertecmultsrl.com</p>
+        <p>Calle Paraíso, #24, Bajos de Haina, Colinas Frescas (Wind Hill), San Cristóbal, República Dominicana</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Sertecmult RD. Todos los derechos reservados.</span>
+      <span>Ingeniería térmica industrial · República Dominicana</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
